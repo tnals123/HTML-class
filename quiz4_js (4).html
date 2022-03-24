@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        var sum = 0
+        var ret = prompt("1~100 사이의 정수만 입력");
+        if (ret < 1 || ret >100){
+            alert("정수 "+ret+"은 100보다 작거나 1보다 커야 합니다");
+        }
+        else if(ret == ""){
+            alert("수를 입력해 주세요");
+        }
+        else{
+            for (var i = 1; i<=ret;i++){
+                sum +=i     
+            }
+            alert(sum)
+        }
+
+    </script>
+    
+</body>
+</html>
