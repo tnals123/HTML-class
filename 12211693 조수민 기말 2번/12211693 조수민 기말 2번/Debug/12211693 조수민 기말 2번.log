@@ -1,0 +1,9 @@
+﻿  소스.cpp
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(32,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(34,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(42,33): error C7538: 'vector<std::vector<int,std::allocator<int> >,std::allocator<std::vector<int,std::allocator<int> > > >'은(는) 변수 템플릿이 아닙니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(42,53): error C2146: 구문 오류: ';'이(가) 'B' 식별자 앞에 없습니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(42,53): error C2065: 'B': 선언되지 않은 식별자입니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(43,37): error C2065: 'B': 선언되지 않은 식별자입니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(44,20): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
+C:\Users\soo86\Desktop\12211693 조수민 기말 2번\12211693 조수민 기말 2번\소스.cpp(45,21): warning C4018: '<': signed 또는 unsigned가 일치하지 않습니다.
