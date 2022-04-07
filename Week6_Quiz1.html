@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function plus(){
+            var asdf = document.getElementById("foodnum");
+            var number = asdf.innerHTML;
+            asdf.innerHTML = parseInt(number)+1; 
+            if (number == 10){
+                asdf.innerHTML = 10;
+            }
+        }
+        function minus(){
+            var asdf = document.getElementById("foodnum");
+            var number = asdf.innerHTML;
+            asdf.innerHTML = parseInt(number)-1; 
+            if (number == 0){
+                asdf.innerHTML = 0;
+            }
+        }
+        function myorder(){
+            var order = document.getElementById("orders");
+            var food = document.getElementById("foodchoice");
+            var num = document.getElementById("foodnum");
+            order.innerHTML = food.options[food.selectedIndex].text + num.innerText + "개 주문했음";
+
+        }
+        
+    </script>
+</head>
+
+<body>
+
+    <h1>
+        메뉴와 수량을 선택하세요
+    </h1>
+
+    <div>메뉴: 
+    <select id = "foodchoice" name="food">
+        <option value="">짜장면</option>
+        <option value="학생">짬뽕</option>
+    </select>
+    </div>
+    <div>수량: 
+        <span id = "foodnum">0</span>
+        <input type="button" id="plusbutton" value="+" onclick="plus()">
+        <input type="button" id="minusbutton" value="-"  onclick="minus()">
+        </div>
+    
+
+    <p><input type="button" value="주문완료" onclick="myorder()" ></p>
+    <p id = "orders"></p>
+    
+</body>
+</html>

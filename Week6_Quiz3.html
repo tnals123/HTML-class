@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function answer1(){
+            var asdf = document.createElement("p");
+            var zxcv = document.getElementById("text1");
+            asdf.innerHTML = "백설공주";
+            zxcv.appendChild(asdf);
+        }
+        function answer2(){
+            var asdf = document.createElement("p");
+            var zxcv = document.getElementById("text2");
+            asdf.innerHTML = "둘다";
+            zxcv.appendChild(asdf);
+        }
+
+    </script>
+</head>
+
+<body>
+    <h1>
+        정답의 동적 삽입
+    </h1>
+    <p>
+        Q, 거울아 거울아 세상에서 누가 가장 예쁘니?
+    </p>
+    <input type="button" value="답보기" id = "answer" onclick="answer1()">
+    <p>
+    <div id = "text1"></div>
+        Q, 죽는냐 사느냐 어떤 것이 문제인가?
+    </p>
+    <input type="button" value="답보기" id = "answer2" onclick="answer2()">
+    <div id = "text2"></div>
+</body>
+</html>

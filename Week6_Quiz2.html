@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        myshow = 0
+        function showhide(){
+            var love = document.getElementById("love");
+            var css = document.getElementById("css");
+            var dmdeka = document.getElementById("dmdeka");
+            if (myshow == 0){
+                love.style.display = "block";
+                css.style.display = "block";
+                dmdeka.style.display = "block";
+                myshow = 1;
+            }
+            else if (myshow == 1){
+                love.style.display = "none";
+                css.style.display = "none";
+                dmdeka.style.display = "none";
+                myshow = 0;
+            }
+        }
+        
+    </script>
+</head>
+<body>
+    <h1>
+        다음 빈 곳에 숨은 단어?
+        <input type="button" value="show/hide" onclick="showhide()">
+    </h1>
+    <br>
+
+    <ul >
+        <li  id = "asdf" >I (<span id = "love" style="color: blue; display: none;">love</span> ) you</li>
+        <li  id = "qwer" >CSS is Cascading (<span id = "css" style="color: blue; display: none;">Sheet</span> ) you</li>
+        <li  id = "zxcv">응답하라 (<span id = "dmdeka" style="color: blue; display: none;">1988</span> )</li>
+    </ul>
+
+    
+</body>
+</html>
