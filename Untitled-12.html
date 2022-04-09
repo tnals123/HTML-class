@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script>hljs.highlightAll();</script>
+
+</head>
+
+    <script>
+    function update_code() {
+    const result_elem = document.querySelector("#highlighting-code code");
+    const text = document.querySelector("#editing-code").value;
+    let html = hljs.highlightAuto(text).value;
+    result_elem.innerHTML =  html.replace(new RegExp("  ", "g"), "&nbsp; ");;
+    }
+
+
+
+        
+    </script>
+
+<body>
+    <input type="button" onclick="update_code(); resize();">
+    <textarea
+    id="editing-code"
+    cols="80"
+    placeholder="소스코드 입력"
+    spellcheck="false"
+
+    >
+  # This program prints Hello, world!
+  
+  print('Hello, world!')
+  </textarea>
+  <pre
+  id="highlighting-code"
+  class="hljs">
+  <code></code>
+</pre>
+    
+
+</body>
+</html>
