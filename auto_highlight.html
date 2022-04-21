@@ -61,26 +61,28 @@
             strEnd = strOriginal.substring(iStartPos, strOriginal.length);
             } else return;
             element.value = strFront + addString + strEnd;
-            }
+            asdf();
 
-        function createSelection() {
-            var field     =         document.getElementById('editing-code');
-            if( field.createTextRange ) {
-                var selRange = field.createTextRange();
-                selRange.collapse(true);
-                selRange.moveStart('ㅤ');
-                selRange.moveEnd('ㅤ');
-                selRange.select();
-                field.focus();
-            } else if( field.setSelectionRange ) {
-                field.focus();
-                field.setSelectionRange(start, end);
-            } else if( typeof field.selectionStart != 'undefined' ) {
-                field.selectionStart = start;
-                field.selectionEnd = end;
-                field.focus();
             }
-        }
+        
+            function SelectText(element) {
+                var doc = document;
+                var text = doc.getElementById(element);    
+                if (doc.body.createTextRange) { // ms
+                    var range = doc.body.createTextRange();
+                    range.moveToElementText(text);
+                    range.select();
+                } else if (window.getSelection) {
+                    var selection = window.getSelection();
+                    var range = doc.createRange();
+                    range.selectNodeContents(text);
+                    selection.removeAllRanges();
+                    selection.addRange(range);
+
+    }
+}
+            
+
 
 
         window.onload = function showAndroidToast() {
@@ -114,8 +116,8 @@
 <body style="margin: 0;">
     <div style="border: 1px solid gray; border-radius: 3dp; height: fit-content; width: fit-content;" >
         <div style="border-bottom: 1px solid gray ;height:fit-content ;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="addText('ㅤasdfㅤ'); createSelection();">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
+            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="addText('ㅤasdfㅤ'); SelectText('editing-code');">
+            <input id = ".click-me" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <div style=" position:absolute; display: inline-block; top: 0; bottom: 0; width: 10px; background-color: gray; height: 7%; margin-left: 10px;"></div>
