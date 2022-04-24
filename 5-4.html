@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    <h3>덧셈 계산 하시고, 결과를 입력하고 확인 버튼을 클릭하여 정확한지 확인해 보세요.</h3>    
+    <hr>
+    <script>
+        var a = Math.floor(Math.random() * 99) + 1;
+        var b = Math.floor(Math.random() * 99) + 1;
+        function check(){
+            if (document.getElementById("number").value == a + b)
+            {
+                alert("정답입니다.");
+            }
+            else
+            {
+                alert("오답입니다.");
+            }
+        }
+        document.write(a + "+" + b + "=");
+    </script>
+    <br>
+    덧셈 결과 :<input id="number" type="text">
+    <button type="button" onclick="check()">결과 확인</button>
+</body>
+</html>

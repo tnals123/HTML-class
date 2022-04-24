@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script>
+        var answer = 50;
+        function check(){
+            var num = document.getElementById("number").value;
+            var time = document.getElementById("time").value;
+            time = parseInt(time)+ 1;
+            document.getElementById("time").value = time;
+            if(num < answer)
+            {
+                document.getElementById("hint").value = "너무 작음";
+            }
+            else if(num > answer)
+            {
+                document.getElementById("hint").value = "너무 큼";
+            }
+            else
+            {
+                document.getElementById("hint").value = "정답";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h3>숫자 맞추기 게임</h3>    
+    <p>이 게임은 컴퓨터가 생성한 숫자를 맞추는 게임입니다. 숫자는 1부터 100 사이에 있습니다.</p>
+    숫자: <input id="number" type="text">
+    <button type="button" onclick="check()">확인</button>
+    <br>
+    추측 횟수:<input id = "time" type= "text" value="0"> 힌트:<input id = "hint" type= "text">
+
+</body>
+</html>

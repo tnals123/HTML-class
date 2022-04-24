@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <script>
+        function check(){
+            document.getElementById("result").value = parseInt(document.getElementById("number_1").value) + parseInt(document.getElementById("number_2").value);
+        }
+    </script>
+</head>
+<body>
+    <h3>덧셈 계산기</h3>    
+    <br>
+    첫 번째 정수: <input id="number_1" type="text">
+    <br>
+    두 번째 정수: <input id="number_2" type="text">
+    <br>
+    합계: <input id="result" type="text">
+    <br>
+    <button type="button" onclick="check()">계산</button>
+    <br>
+    
+
+</body>
+</html>
