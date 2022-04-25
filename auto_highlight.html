@@ -32,55 +32,27 @@
             });
 
         function insertTextAtCursor(text) {
-            var el = document.getElementById("editing-code");
+            var el = document.querySelector("#editing-code")
             var val = el.value, endIndex, range, doc = el.ownerDocument;
             if (typeof el.selectionStart == "number"
                     && typeof el.selectionEnd == "number") {
                 endIndex = el.selectionEnd;
+                console.log(endIndex);
                 el.value = val.slice(0, endIndex) + text + val.slice(endIndex);
                 el.selectionStart = el.selectionEnd = endIndex + text.length;
+                el.focus();
             } else if (doc.selection != "undefined" && doc.selection.createRange) {
                 el.focus();
                 range = doc.selection.createRange();
                 range.collapse(false);
                 range.text = text;
-                range.select();
+
             }
         }
 
-        function addText(addString) {
-            var element     =         document.getElementById('editing-code');
-            var strOriginal  =         element.value;
-            var iStartPos    =         element.selectionStart;
-            var iEndPos     =         element.selectionEnd;
-            var strFront     =         "";
-            var strEnd       =         "";
 
-            if(iStartPos == iEndPos) {
-            strFront = strOriginal.substring(0, iStartPos);
-            strEnd = strOriginal.substring(iStartPos, strOriginal.length);
-            } else return;
-            element.value = strFront + addString + strEnd;
-            asdf();
-
-            }
         
-            function SelectText(element) {
-                var doc = document;
-                var text = doc.getElementById(element);    
-                if (doc.body.createTextRange) { // ms
-                    var range = doc.body.createTextRange();
-                    range.moveToElementText(text);
-                    range.select();
-                } else if (window.getSelection) {
-                    var selection = window.getSelection();
-                    var range = doc.createRange();
-                    range.selectNodeContents(text);
-                    selection.removeAllRanges();
-                    selection.addRange(range);
 
-    }
-}
             
 
 
@@ -116,7 +88,7 @@
 <body style="margin: 0;">
     <div style="border: 1px solid gray; border-radius: 3dp; height: fit-content; width: fit-content;" >
         <div style="border-bottom: 1px solid gray ;height:fit-content ;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="addText('ㅤasdfㅤ'); SelectText('editing-code');">
+            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertTextAtCursor('ㅤasdfㅤ');">
             <input id = ".click-me" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
