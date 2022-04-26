@@ -12,12 +12,25 @@
 </head>
 
     <script>
+
+        var count = 1;
     
         function update_code() {
             const result_elem = document.querySelector("#highlighting-code code");
             const text = document.querySelector("#editing-code").value;
             let html = hljs.highlightAuto(text).value;
             result_elem.innerHTML =  html.replace(new RegExp("  ", "g"), "&nbsp; ");;
+        }
+
+        function update_code2() {
+            var result_elem = document.querySelector("#count1");
+            var text = document.querySelector("#editing-code").value;
+            result_elem.innerHTML =  text;
+        }
+
+        function auto_grow(element) {
+            element.style.height = "5px";
+            element.style.height = (element.scrollHeight)+"px";
         }
 
         function resize() {
@@ -37,7 +50,8 @@
             if (typeof el.selectionStart == "number"
                     && typeof el.selectionEnd == "number") {
                 endIndex = el.selectionEnd;
-                console.log(endIndex);
+                console.log( val.slice(endIndex));
+                console.log( val.slice(0, endIndex));
                 el.value = val.slice(0, endIndex) + text + val.slice(endIndex);
                 el.selectionStart = el.selectionEnd = endIndex + text.length;
                 el.focus();
@@ -50,10 +64,15 @@
             }
         }
 
-
-        
-
-            
+        function insertCodeBlock(){
+            var paper = document.body;
+            var codeblock = document.createElement("pre");
+            codeblock.style.height = "20px";
+            codeblock.setAttribute("class","hljs");
+            var code = document.createElement("code");
+            codeblock.appendChild(code);
+            paper.appendChild(codeblock);
+        }
 
 
 
@@ -88,7 +107,7 @@
 <body style="margin: 0;">
     <div style="border: 1px solid gray; border-radius: 3dp; height: fit-content; width: fit-content;" >
         <div style="border-bottom: 1px solid gray ;height:fit-content ;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertTextAtCursor('ㅤasdfㅤ');">
+            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertTextAtCursor('‛‛‛ 코드를 입력해 주세요! ‛‛‛'); insertCodeBlock();">
             <input id = ".click-me" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
@@ -100,19 +119,34 @@
         placeholder="소스코드 입력"
         spellcheck="false"
         style="min-height:200px; max-height: 200px; width:1000px; top: 10px; resize: none; overflow: scroll; margin : 0  "
-        onclick="update_code(); resize(); showAndroidToast()"
-        oninput="update_code(); resize();">
+        onclick="update_code2(); resize(); showAndroidToast()"
+        oninput="update_code2(); resize(); auto_grow(document.getElementById('count1'))">
 # 클릭 시 코드창이 뜹니다. 바로 입력해 주세요
         
 print('Hello, world!')
-        </textarea>
+    </textarea>
     </div>
-  <pre
-  style="height:300px;width:600px;top: 10px;"
-  id="highlighting-code"
-  class="hljs">
-  <code></code>
-</pre>
+
+    <!-- <pre
+        style="height:300px;width:600px;top: 10px; background-color: white; color: black;"
+        id="highlighting-code"
+        class="hljs">
+            <code></code>
+    </pre> -->
+
+    <pre style="height:30px;width:600px;top: 10px; background-color: white; color: black" id = "count1">
+
+        <div>
+            WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQasdfa
+            WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQasdfadfsaasf
+            ds
+        </div>
+
+    </pre>
+
+
+
+
     
 
 </body>
