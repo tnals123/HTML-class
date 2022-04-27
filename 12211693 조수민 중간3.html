@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        count = 0;
+        mycount = 0 ;
+        function click(){
+            console.log(mycount);
+            // if (mycount == 0){
+            //     this.style.color = "red";
+            //     mycount+=1;
+            // }
+            // else if (mycount == 1){
+            //     this.style.color = "orange";
+            //     mycount+=1;
+            // }
+            // else if (mycount == 2){
+            //     this.style.color = "yellow";
+            //     mycount+=1;
+            // }
+            // else if (mycount == 3){
+            //     this.style.color = "green";
+            //     mycount+=1;
+            // }
+            // else if (mycount == 4){
+            //     this.style.color = "blue";
+            //     mycount+=1;
+            // }
+            // else if (mycount == 5){
+            //     this.style.color = "purple";
+            //     mycount = 0;
+            // }
+        }
+        function game(){
+
+            var asdf = document.getElementById("game");
+            var asfdasdf = document.getElementById("gamegame");
+            var word = asdf.value;
+
+            if (asdf.value == ""){
+                alert("수를 입력받지 않으셨습니다");
+                return;
+            }
+            if (count == 0){
+                var mhdiv = document.createElement("div");
+                mhdiv.style.color = "red";
+                mhdiv.innerHTML = word;
+                asfdasdf.appendChild(mhdiv);
+                count+=1;
+            }
+            else{
+                var myword = asfdasdf.children[count-1].innerHTML;
+                var qwer = myword[myword.length-1];
+                if (asdf.value[0] != qwer){
+                    alert("다시 생각해 보세요");
+                }
+                else{
+                    var mhdiv = document.createElement("div");
+                    mhdiv.style.color = "red";
+                    mhdiv.innerHTML = word;
+                    asfdasdf.appendChild(mhdiv);
+                    count+=1;
+                }
+            }
+        }
+    </script>
+</head>
+<body>
+    <h2>끝말잇기 입니다</h2>
+    <h1>단어를 입력해보세요</h1>
+
+    <input type="text" id = "game">
+    <input type="button" value="제출" onclick="game()">
+    <div id = "gamegame"></div>
+</body>
+</html>
