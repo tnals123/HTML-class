@@ -7,7 +7,20 @@
     <title>Document</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js" integrity="sha512-z+/WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script>hljs.initHighlightingOnLoad();</script>
+    <script>hljs.highlightAll();</script>
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
+
+    <style>
+        pre{
+            font-family: 'Source Code Pro';
+            line-height: 1.2;
+        }
+        code{
+            font-family: 'Source Code Pro';
+            line-height: 1.5;
+            height: 30px;
+        }
+    </style>
 
 </head>
 
@@ -21,17 +34,54 @@
             const result_elem = document.querySelector("#highlighting-code code");
             const text = document.querySelector("#editing-code").value;
             let html = hljs.highlightAuto(text).value;
-            result_elem.innerHTML =  html.replace(new RegExp("  ", "g"), "&nbsp; ");;
+            result_elem.innerHTML =  html.replace(new RegExp("  ", "g"), "&nbsp; ");
         }
 
-        function update_mycode(){
-            var result_elem = document.querySelector("#count1");
+        function update_mycode(index, index2){
+            var asdf = 0;
+            
+            var result_elem = document.getElementById("count1");
             var text = document.getElementById("editing-code");
-            console.log(text.innerText)
-            result_elem.innerHTML = text.innerHTML;
-            result_elem.innerHTML = text.innerHTML.replace('<textarea style="height: 20px; width: 300px; resize: none;"></textarea>','c');
-            console.log(text.getElementsByTagName("textarea")[0].value);
-            console.log(codearray);
+            var lines = text.value.split("\n");
+            var lines2 = text.value.split("‛");
+            console.log(lines)
+            var resultString ;
+            for (var i = 0; i < lines.length; i++) {
+                asdf = 0;
+                var first = 0 ;
+                var final = 0 ;
+
+
+                for (var q = 0 ; q<lines[i].length; q++){
+                    if (lines[i][q] == "‛"){
+                        if (asdf == 0){
+                            first = q;
+                            asdf += 1;
+                        }
+                        else if (asdf == 1){
+                            final = q;
+                            asdf += 1;
+                        }
+                    }
+                }
+                if (asdf == 2){
+                    var mytext = lines[i].slice(first+1,final);
+                    let html = hljs.highlightAuto(mytext).value;
+                    console.log(html)
+                    html.replace(new RegExp("  ", "g"), "&nbsp; ");
+                    resultString += "<p>"+ lines[i].slice(0,first) +"</p>" + "<code style = border-radius:3px;"+ "background-color:#D3D3D3;>" + html + "</code>"
+                }
+                else{
+                    resultString += "<p>"+ lines[i] + "</p>"; 
+                }
+
+            } 
+            // resultString += "</p>";
+
+
+            result_elem.innerHTML = resultString;
+            console.log(result_elem.innerText.slice(index,index2))
+
         }
 
         function update_code2() {
@@ -51,114 +101,77 @@
         }
 
 
-        // function insertTextAtCursor(text) {
-        //     var el = document.getElementById("editing-code")
-        //     var val = el.value, endIndex, range, doc = el.ownerDocument;
-        //     if (typeof el.selectionStart == "number"
-        //             && typeof el.selectionEnd == "number") {
-        //         endIndex = el.selectionEnd;
-        //         console.log( val.slice(endIndex));
-        //         console.log( val.slice(0, endIndex));
-        //         el.value = val.slice(0, endIndex) + text + val.slice(endIndex);
-        //         el.selectionStart = el.selectionEnd = endIndex + text.length;
-        //         el.focus();
-        //         insertCodeBlock(el.selectionEnd-20);
-        //     } else if (doc.selection != "undefined" && doc.selection.createRange) {
-        //         el.focus();
-        //         range = doc.selection.createRange();
-        //         range.collapse(false);
-        //         range.text = text;
-
-        //     }
-        // }
-
-
         function insertCodeBlock(position){
             var paper = document.getElementById("editing-code");
+            var result_elem = document.querySelector("#count1");
+            console.log(position);
  
-            paper_childtext = paper.childNodes[0];
+            var paper_childtext = paper.childNodes[0];
+
+            var result_childtext = result_elem.childNodes[0];
             var codeblock = document.createElement("textarea");
+            // var codePre = document. createElement("pre");
+            // var code = document.createElement("code");
+
+            // codePre.setAttribute("id","highlighing-code");
+            // codePre.setAttribute("class","hljs");
+            // codePre.style.width = "300px";
+
+            // codePre.appendChild(code);
+
+
             codeblock.style.height = "20px";
             codeblock.style.width = "300px";
             codeblock.style.overflow = "none";
             codeblock.style.resize = "none";
 
+
             codeblock.oninput = function(){
                 auto_grow(this);
-
             }
-
+            console.log(paper_childtext.length)
+            console.log(paper_childtext.splitText(position));
             paper.insertBefore(codeblock, paper_childtext.splitText(position));
-
-
+                    
         }
-        // function getCaretPosition(editableDiv) {
-        //     var caretPos = 0,
-        //         sel, range;
-        //     if (window.getSelection) {
-        //         sel = window.getSelection();
-        //         if (sel.rangeCount) {
-        //         range = sel.getRangeAt(0);
-        //         if (range.commonAncestorContainer.parentNode == editableDiv) {
-        //             caretPos = range.endOffset;
-        //         }
-        //         }
-        //     } else if (document.selection && document.selection.createRange) {
-        //         range = document.selection.createRange();
-        //         if (range.parentElement() == editableDiv) {
-        //         var tempEl = document.createElement("span");
-        //         editableDiv.insertBefore(tempEl, editableDiv.firstChild);
-        //         var tempRange = range.duplicate();
-        //         tempRange.moveToElementText(tempEl);
-        //         tempRange.setEndPoint("EndToEnd", range);
-        //         caretPos = tempRange.text.length;
-        //         }
-        //     }
-        //     return caretPos;
-        //     }
 
-        function getCaretPosition(elem) {
-            var sel = window.getSelection();
-            var cum_length = [0, 0];
-
-            if(sel.anchorNode == elem)
-                cum_length = [sel.anchorOffset, sel.extentOffset];
-            else {
-                var nodes_to_find = [sel.anchorNode, sel.extentNode];
-                if(!elem.contains(sel.anchorNode) || !elem.contains(sel.extentNode))
-                return undefined;
-                else {
-                var found = [0,0];
-                var i;
-                node_walk(elem, function(node) {
-                    for(i = 0; i < 2; i++) {
-                    if(node == nodes_to_find[i]) {
-                        found[i] = true;
-                        if(found[i == 0 ? 1 : 0])
-                        return false; // all done
+        function check(){
+            var mycount = 0
+            var firstcount = 0;
+            var finalcount = 0;
+            var my = document.getElementById("editing-code");
+            console.log(my.value)
+            for (i = 0 ; i < my.value.length; i++){
+                if (my.value[i] == "‛"){
+                    if (mycount == 0){
+                        firstcount = i;
                     }
+                    else if (mycount == 1){
+                        finalcount = i;
                     }
-
-                    if(node.textContent && !node.firstChild) {
-                    for(i = 0; i < 2; i++) {
-                        if(!found[i])
-                        cum_length[i] += node.textContent.length;
-                    }
-                    }
-                });
-                cum_length[0] += sel.anchorOffset;
-                cum_length[1] += sel.extentOffset;
+                    mycount += 1;
+                }
+                if (mycount == 2){
+                    console.log(my.value.slice(firstcount+1,finalcount))
+                    update_mycode(firstcount+1,finalcount);
+                    mycount = 0;
                 }
             }
-            if(cum_length[0] <= cum_length[1]){
-                return cum_length[0];
-            }
-            return cum_length[0];
-            }
+
+        }
 
 
         function printCaretPosition(){
-            // console.log(getCaretPosition(document.getElementById("editing-code")))
+            var cursorPosition = $('#editing-code').prop("selectionStart");
+            // will get the value of the text area
+            let x= $('#editing-code').val();
+
+            // will get the value of the input box
+            let text_to_insert="‛코드를 입력해 주세요!‛";
+
+            // setting the updated value in the text area
+            $('#editing-code').val(x.slice(0,cursorPosition)+text_to_insert+x.slice(cursorPosition));
+
         }
 
         function node_walk(node, func) {
@@ -167,8 +180,6 @@
                 result = node_walk(node, func);
             return result;
             };
-
-
 
         window.onload = function showAndroidToast() {
             var mywidth = Android.getwidth();
@@ -201,24 +212,24 @@
 <body style="margin: 0;">
     <div style="border: 1px solid gray; border-radius: 3dp; height: fit-content; width: fit-content;" >
         <div style="border-bottom: 1px solid gray ;height:fit-content ;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertCodeBlock(getCaretPosition(document.getElementById('editing-code'))); auto_grow(document.getElementById('count1'))">
+            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="printCaretPosition(); check();">
             <input id = ".click-me" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
             <div style=" position:absolute; display: inline-block; top: 0; bottom: 0; width: 10px; background-color: gray; height: 7%; margin-left: 10px;"></div>
         
         </div>
-        <pre contenteditable="true"
+        <textarea contenteditable="true"
         id="editing-code"
         placeholder="소스코드 입력"
         spellcheck="false"
         style="white-space: pre; min-height:200px; max-height: 200px; width:1000px; top: 10px; resize: none; overflow: scroll; margin : 0 "
-        onclick="update_code2(); printCaretPosition(); resize(); showAndroidToast(); "
+        onclick="update_code2(); resize();  "
         oninput="update_mycode(); resize();">
 dksdugktpdy
 whtnalsdlqsek
 
-    </pre>
+    </textarea>
     </div>
 
     <!-- <pre
@@ -228,8 +239,7 @@ whtnalsdlqsek
             <code></code>
     </pre> -->
 
-    <pre style="height:30px;width:600px;top: 10px; background-color: white; color: black" id = "count1">
-
+    <pre class = "hljs" style="white-space:pre; height:400px; width:600px;top: 10px; background-color: white; color: black" id = "count1">
 
     </pre>
 
