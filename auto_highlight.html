@@ -286,6 +286,15 @@
             }
         }
 
+        function opaCiTyNone(){
+            var result_elem = document.getElementById("count1");
+            result_elem.style.display = "block";
+        }
+        function opaCiTyOn(){
+            var result_elem = document.getElementById("count1");
+            result_elem.style.display = "none";
+        }
+
 
         function printCaretPosition(){
             var cursorPosition = $('#editing-code').prop("selectionStart");
@@ -341,8 +350,8 @@
         <div style="border-bottom: 1px solid gray ;height:fit-content ;">
             <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertAtCursor(document.getElementById('editing-code'), '\n‛코드를 입력해 주세요!‛'); update_mycode()">
             <input id = ".click-me" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
+            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="opaCiTyNone()">
+            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="opaCiTyOn()">
             <div style=" position:absolute; display: inline-block; top: 0; bottom: 0; width: 10px; background-color: gray; height: 7%; margin-left: 10px;"></div>
         
         </div>
@@ -350,7 +359,7 @@
         id="editing-code"
         placeholder="소스코드 입력"
         spellcheck="false"
-        style=" border: none; min-height:200px; max-height: 200px; width:400px; top: 10px; resize: none; overflow: scroll; margin : 0 "
+        style=" border: none; min-height:400px; max-height: 400px; width:400px; top: 10px; resize: none; overflow: scroll; margin : 0 "
         onclick="update_code2(); resize();  "
         oninput="update_mycode(); resize();">
 dksdugktpdy
@@ -366,7 +375,7 @@ whtnalsdlqsek
             <code></code>
     </pre> -->
 
-    <pre class = "hljs" style="word-break: break-all; white-space: pre-wrap; height:400px; width:600px;top: 10px; background-color: white; color: black" id = "count1">
+    <pre class = "hljs" style="position: absolute; display: none; top: 0; margin: 0; word-break: break-all; white-space: pre-wrap; height:400px; width:600px; background-color: white; color: black" id = "count1">
     </pre>
 
 

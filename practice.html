@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js" integrity="sha512-z+/WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
+
+</head>
+
+    <script>
+        //그럼 이제 뭐해야하냐 div 를 textarea 처럼 만들고 버튼 누를때마다 dom 구조 생성. ㅇㅋㅇㅋ
+
+        var count = 0;
+        var codearray = [[]];
+    
+        function update_code() {
+            const result_elem = document.querySelector("#highlighting-code code");
+            const text = document.querySelector("#editing-code").value;
+            let html = hljs.highlightAuto(text).value;
+            result_elem.innerHTML =  html.replace(new RegExp("  ", "g"), "&nbsp; ");;
+        }
+
+        function update_mycode(text){
+            var result_elem = document.getElementById("count1");
+            result_elem.innerText = result_elem.innerText + text;
+        }
+
+        function update_code2() {
+            var result_elem = document.querySelector("#count1");
+            var text = document.querySelector("#editing-code")
+        }
+
+        function auto_grow(element) {
+            element.style.height = "5px";
+            element.style.height = (element.scrollHeight)+"px";
+        }
+
+        function resize() {
+            const editor = document.querySelector('#editing-code');
+            editor.style.height = "20px";
+            editor.style.height = (editor.scrollHeight + 5)+"px";
+        }
+
+
+        function insertCodeBlock(position){
+            var paper = document.getElementById("editing-code");
+            var result_elem = document.querySelector("#count1");
+            console.log(position);
+ 
+            var paper_childtext = paper.childNodes[0];
+            var result_childtext = result_elem.childNodes[0];
+            var codeblock = document.createElement("textarea");
+            // var codePre = document. createElement("pre");
+            // var code = document.createElement("code");
+
+            // codePre.setAttribute("id","highlighing-code");
+            // codePre.setAttribute("class","hljs");
+            // codePre.style.width = "300px";
+
+            // codePre.appendChild(code);
+
+
+            codeblock.style.height = "20px";
+            codeblock.style.width = "300px";
+            codeblock.style.overflow = "none";
+            codeblock.style.resize = "none";
+
+
+            codeblock.oninput = function(){
+                auto_grow(this);
+                // code.innerHTML = this.value;
+
+            }
+
+            paper.insertBefore(codeblock, paper_childtext.splitText(position));
+
+            console.log(paper.childNodes);
+            // result_elem.insertBefore(codePre,result_childtext.splitText(position))
+
+
+        }
+        // function getCaretPosition(editableDiv) {
+        //     var caretPos = 0,
+        //         sel, range;
+        //     if (window.getSelection) {
+        //         sel = window.getSelection();
+        //         if (sel.rangeCount) {
+        //         range = sel.getRangeAt(0);
+        //         if (range.commonAncestorContainer.parentNode == editableDiv) {
+        //             caretPos = range.endOffset;
+        //         }
+        //         }
+        //     } else if (document.selection && document.selection.createRange) {
+        //         range = document.selection.createRange();
+        //         if (range.parentElement() == editableDiv) {
+        //         var tempEl = document.createElement("span");
+        //         editableDiv.insertBefore(tempEl, editableDiv.firstChild);
+        //         var tempRange = range.duplicate();
+        //         tempRange.moveToElementText(tempEl);
+        //         tempRange.setEndPoint("EndToEnd", range);
+        //         caretPos = tempRange.text.length;
+        //         }
+        //     }
+        //     return caretPos;
+        //     }
+
+        function getCaretPosition(elem) {
+            var sel = window.getSelection();
+            var cum_length = [0, 0];
+
+            if(sel.anchorNode == elem)
+                cum_length = [sel.anchorOffset, sel.extentOffset];
+            else {
+                var nodes_to_find = [sel.anchorNode, sel.extentNode];
+                if(!elem.contains(sel.anchorNode) || !elem.contains(sel.extentNode))
+                return undefined;
+                else {
+                var found = [0,0];
+                var i;
+                node_walk(elem, function(node) {
+                    for(i = 0; i < 2; i++) {
+                    if(node == nodes_to_find[i]) {
+                        found[i] = true;
+                        if(found[i == 0 ? 1 : 0])
+                        return false; // all done
+                    }
+                    }
+
+                    if(node.textContent && !node.firstChild) {
+                    for(i = 0; i < 2; i++) {
+                        if(!found[i])
+                        cum_length[i] += node.textContent.length;
+                    }
+                    }
+                });
+                cum_length[0] += sel.anchorOffset;
+                cum_length[1] += sel.extentOffset;
+                }
+            }
+            if(cum_length[0] <= cum_length[1]){
+                return cum_length[0];
+            }
+            return cum_length[0];
+            }
+
+
+        function printCaretPosition(){
+            console.log(getCaretPosition(document.getElementById("editing-code")))
+        }
+
+        function node_walk(node, func) {
+            var result = func(node);
+            for(node = node.firstChild; result !== false && node; node = node.nextSibling)
+                result = node_walk(node, func);
+            return result;
+            };
+
+        window.onload = function showAndroidToast() {
+            var mywidth = Android.getwidth();
+            var px = Android.getwidth(mywidth);
+            var mypx = px - 29;
+            var mypx_codeblcok = px - 32;
+            Android.showToast(String(mypx));
+            var transe = document.getElementById("editing-code");
+            var code_block = document.getElementById("highlighting-code")
+            transe.style.width = mypx+"px";
+            code_block.style.width = mypx_codeblcok+"px";
+            document.getElementById(id).width = newContent;
+        }
+
+
+
+
+        
+    </script>
+
+<body style="margin: 0;">
+
+
+    <pre style="height:30px;width:600px;top: 10px; background-color: white; color: black" id = "count1">
+
+
+    </pre>
+
+
+
+
+    
+
+</body>
+</html>
