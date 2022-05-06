@@ -20,6 +20,62 @@
             line-height: 1.5;
             height: 40px;
         }
+
+
+        .wmd-button-bar {
+            clear: both;
+            background-color: transparent;
+            margin: 0 0 0 0;
+            padding: 0;
+            width: 100%;
+            border: 1px solid var(--bc-darker);
+            border-bottom: 0;
+            min-height: 44px;
+            overflow: hidden;
+            z-index: 2;
+            position: relative;
+        }   
+        .wmd-button-row {
+            padding: 0 var(--su4) 0 var(--su8);
+            margin: 0;
+            display: flex;
+            list-style: none;
+            flex-wrap: wrap;
+            height: 44px;
+            border-bottom: 1px solid var(--bc-darker);
+        }
+
+        .wmd-button {
+            max-width: 28px;
+            height: 44px;
+            flex: 10 0 23px;
+            padding: 0;
+            padding: 12px 0 0 0;
+            text-align: center;
+            cursor: pointer;
+        }
+        .wmd-button>span {
+            background-image: url(https://cdn.sstatic.net/Img/unified/wmd-buttons.svg?v=c26278fc22d9);
+            background-size: initial !important;
+        }
+        .wmd-button>span {
+            background-repeat: no-repeat;
+            background-position: 0 0;
+            width: 20px;
+            height: 20px;
+            display: inline-block;
+        }
+
+        .wmd-spacer {
+            height: 44px;
+            flex: 1 0 4px;
+            max-width: 27px;
+            display: flex;
+            flex-wrap: wrap;
+            overflow: hidden;
+            position: relative;
+            left: 4px;
+        }
     </style>
 
 </head>
@@ -43,6 +99,14 @@
             var checkTagRequired = true;
             var first = 0;
             var final = 0;
+
+            var boldfirst = 0 ;
+            var boldfinal = 0;
+            var boldcount = 0;
+
+            var italicfirst = 0 ;
+            var italicfinal = 0;
+            var italiccount = 0;
             
             var result_elem = document.getElementById("count1");
             var text = document.getElementById("editing-code");
@@ -50,41 +114,54 @@
             var lines2 = text.value.split("‛");
             var resultString = "";
 
-            // for (var i = 0; i < lines.length; i++) {
-            //     asdf = 0;
-
-            //     for (var q = 0 ; q<lines[i].length; q++){
-            //         if (lines[i][q] == "‛"){
-            //             if (asdf == 0){
-            //                 first = q;
-            //                 asdf += 1;
-            //             }
-            //             else if (asdf == 1){
-            //                 final = q;
-            //                 asdf += 1;
-            //             }
-            //         }
-            //     }
-            //     if (asdf == 2){
-            //         var mytext = lines[i].slice(first+1,final);
-            //         let html = hljs.highlightAuto(mytext).value;
-            //         if (lines[i].slice(0,first).length == 0){
-            //             checkTagRequired = false;
-            //         }
-            //         else{
-            //             checkTagRequired = true;
-            //         }
-            //     }
-
-            // } 
-
 
             for (var i = 0; i < lines.length; i++) {
                  resultString += "<p>"+ lines[i] + "</p>"; 
             } 
 
             for (var i = 0 ; i <resultString.length; i++){
-                if (resultString[i] == "‛"){
+
+                if (resultString[i] == "『"){
+                    if (boldcount == 0){
+                        boldfirst = i;
+                        boldcount += 1;
+                    }
+                }
+                else if (resultString[i] == "』"){
+                    if (boldcount == 1){
+                        boldfinal = i;
+                        boldcount += 1;
+                    }
+                }
+                if (boldcount == 2){
+                    var boldtext = resultString.slice(boldfirst,boldfinal + 1);
+                    var boldinnertext = resultString.slice(boldfirst+1,boldfinal);
+                    console.log(boldtext)
+                    resultString = resultString.replace(new RegExp(boldtext, "g"),"<span style=" + "font-weight:bold;"+">"+boldinnertext+"</span>");
+                    boldcount = 0;
+                }
+
+                else if (resultString[i] == "「"){
+                    if (italiccount == 0){
+                        italicfirst = i;
+                        italiccount += 1;
+                    }
+                }
+                else if (resultString[i] == "」"){
+                    if (italiccount == 1){
+                        italicfinal = i;
+                        italiccount += 1;
+                    }
+                }
+                if (italiccount == 2){
+                    var italictext = resultString.slice(italicfirst,italicfinal + 1);
+                    var italicinnertext = resultString.slice(italicfirst+1,italicfinal);
+                    console.log(italicfirst,italicfinal)
+                    resultString = resultString.replace(new RegExp(italictext, "g"),"<span style=" + "font-style:italic;"+">"+italicinnertext+"</span>");
+                    italiccount = 0;
+                }
+
+                else if (resultString[i] == "‛"){
                     if (textcound == 0){
                             first = i;
                             textcound += 1;
@@ -95,10 +172,7 @@
                         }
                 }
                 if (textcound == 2){
-                    // var html3 = html.replace(new RegExp('&lt;/<span class="hljs-selector-tag">p</span>&gt;&lt;<span class="hljs-selector-tag">p</span>&gt;', "g"),'<br>')
-                    // console.log(html3)
-                    // var html4 = html3.replace(new RegExp('<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>',"g"),'<br>')
-                    
+
                     String.prototype.replaceAt = function(index, replacement) {
                         return this.substring(0, index) + replacement + this.substring(index + replacement.length);
                     }
@@ -126,56 +200,18 @@
                         }
                     }
 
-                    // html = html.replace(new RegExp("  ", "g"), "&nbsp;");
                     console.log(html)
                     var html3 = html.replace(new RegExp('&lt;br&gt;', "g"),'<br>')
                     var html4 = html3.replace(new RegExp('<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>', "g"),'<br>')
-                    // var html4 = html3.replace(new RegExp('<span class="hljs-tag">&lt;/<span class="hljs-name">p</span>&gt;</span><span class="hljs-tag">&lt;<span class="hljs-name">p</span>&gt;</span>',"g"),'<br>')
-                    //이제 줄 바꿈 처리하자;
+
 
                     resultString = resultString.replace(resultString.slice(first,final+1),"<pre id = 'asdf' " + " onchange = " + '"'+ auto_grow2(document.getElementById("asdf")) + '"' + "style = width:fit-content;" +"white-space:pre-line;" +"background-color:#D3D3D3;"+ "><code style = border-radius:3px;"+"word-break:break-all;"+">"  + html4 + "</code></pre>")
-                    // resultString += "<code style = border-radius:3px;"+ "background-color:#D3D3D3;>" + html + "</code>"
                     textcound = 0;
                 }
 
             }
             
 
-
-            // var resultString ;
-            // for (var i = 0; i < lines.length; i++) {
-            //     asdf = 0;
-            //     var first = 0 ;
-            //     var final = 0 ;
-
-
-            //     for (var q = 0 ; q<lines[i].length; q++){
-            //         if (lines[i][q] == "‛"){
-            //             if (asdf == 0){
-            //                 first = q;
-            //                 asdf += 1;
-            //             }
-            //             else if (asdf == 1){
-            //                 final = q;
-            //                 asdf += 1;
-            //             }
-            //         }
-            //     }
-            //     if (asdf == 2){
-            //         var mytext = lines[i].slice(first+1,final);
-            //         let html = hljs.highlightAuto(mytext).value;
-            //         console.log(html)
-            //         html.replace(new RegExp("  ", "g"), "&nbsp; ");
-            //         resultString += "<p>"+ lines[i].slice(0,first) +"</p>" + "<code style = border-radius:3px;"+ "background-color:#D3D3D3;>" + html + "</code>"
-            //     }
-            //     else{
-            //         resultString += "<p>"+ lines[i] + "</p>"; 
-            //     }
-
-            // } 
-
-
-            // resultString += "</p>";
 
 
             result_elem.innerHTML = resultString;
@@ -219,14 +255,6 @@
 
             var result_childtext = result_elem.childNodes[0];
             var codeblock = document.createElement("textarea");
-            // var codePre = document. createElement("pre");
-            // var code = document.createElement("code");
-
-            // codePre.setAttribute("id","highlighing-code");
-            // codePre.setAttribute("class","hljs");
-            // codePre.style.width = "300px";
-
-            // codePre.appendChild(code);
 
 
             codeblock.style.height = "20px";
@@ -243,31 +271,6 @@
             paper.insertBefore(codeblock, paper_childtext.splitText(position));
                     
         }
-
-        // function check(){
-        //     var mycount = 0
-        //     var firstcount = 0;
-        //     var finalcount = 0;
-        //     var my = document.getElementById("editing-code");
-        //     console.log(my.value)
-        //     for (i = 0 ; i < my.value.length; i++){
-        //         if (my.value[i] == "‛"){
-        //             if (mycount == 0){
-        //                 firstcount = i;
-        //             }
-        //             else if (mycount == 1){
-        //                 finalcount = i;
-        //             }
-        //             mycount += 1;
-        //         }
-        //         if (mycount == 2){
-        //             console.log(my.value.slice(firstcount+1,finalcount))
-        //             update_mycode(firstcount+1,finalcount);
-        //             mycount = 0;
-        //         }
-        //     }
-
-        // }
 
         function insertAtCursor(myField, myValue) {
             if (document.selection) {
@@ -295,27 +298,60 @@
             result_elem.style.display = "none";
         }
 
-
-        function printCaretPosition(){
-            var cursorPosition = $('#editing-code').prop("selectionStart");
-            // will get the value of the text area
-            let x= $('#editing-code').val();
-            
-
-            // will get the value of the input box
-            let text_to_insert="‛코드를 입력해 주세요!‛";
-
-            // setting the updated value in the text area
-            $('#editing-code').val(x.slice(0,cursorPosition)+"\n"+text_to_insert+x.slice(cursorPosition));
-
+        function qwer(){
+            var test = document.getElementById("test")
+            test.onmousedown = function(e){
+            e = e || window.event;
+            e.preventDefault();
+        }
         }
 
-        function node_walk(node, func) {
-            var result = func(node);
-            for(node = node.firstChild; result !== false && node; node = node.nextSibling)
-                result = node_walk(node, func);
-            return result;
-            };
+        function changeBoldStyle() {
+            var count = 0;
+            var sel = window.getSelection(); 
+            var str=document.getElementById("editing-code"); 
+            var e = document.createElement('span');
+            e.innerHTML = sel.toString(); 
+            console.log(e.innerHTML)
+            for (i = 0 ; i <e.innerHTML.length; i++){
+                if (e.innerHTML[i] == "『" || e.innerHTML[i] =="』" ){
+                    count += 1
+                }
+            }
+            if (count == 2){
+                var mystr = str.value.replace(e.innerHTML, e.innerHTML.slice(1,e.innerHTML.length-1));
+                str.value = mystr;
+            }
+            else{
+                var mystr = str.value.replace(e.innerHTML,"『" + e.innerHTML + "』");
+                str.value = mystr;
+            }
+
+            update_mycode()
+            }
+        
+        function changeItalicStyle() {
+            var count = 0;
+            var sel = window.getSelection(); 
+            var str=document.getElementById("editing-code"); 
+            var e = document.createElement('span');
+            e.innerHTML = sel.toString(); 
+            for (i = 0 ; i <e.innerHTML.length; i++){
+                if (e.innerHTML[i] == "「" || e.innerHTML[i] =="」" ){
+                    count += 1
+                }
+            }
+            if (count == 2){
+                var mystr = str.value.replace(e.innerHTML, e.innerHTML.slice(1,e.innerHTML.length-1));
+                str.value = mystr;
+            }
+            else{
+                var mystr = str.value.replace(e.innerHTML,"「" + e.innerHTML + "」");
+                str.value = mystr;
+            }
+
+            update_mycode()
+        }
 
         window.onload = function showAndroidToast() {
             var mywidth = Android.getwidth();
@@ -330,31 +366,89 @@
             document.getElementById(id).width = newContent;
         }
 
-        var exam_script = {
-        plus_num: function(num){
-            try{
-                window.java.getNum(num+num);
-            }catch(err){
-                console.log(">> [exam_script.plus_num()] " + err);
-            }
-        }
-    }
-
-
-
-        
+    
     </script>
 
 <body style="margin: 0;">
-    <div style="border: 1px solid gray; border-radius: 3dp; height: fit-content; width: fit-content;" >
-        <div style="border-bottom: 1px solid gray ;height:fit-content ;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertAtCursor(document.getElementById('editing-code'), '\n‛코드를 입력해 주세요!‛'); update_mycode()">
-            <input id = ".click-me" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="opaCiTyNone()">
-            <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="opaCiTyOn()">
-            <div style=" position:absolute; display: inline-block; top: 0; bottom: 0; width: 10px; background-color: gray; height: 7%; margin-left: 10px;"></div>
+    <div style=" border-radius: 3dp; height: fit-content; width: fit-content;" >
+
+            <div id="wmd-button-bar" class="wmd-button-bar btr-sm mt0">
+                <ul id="wmd-button-row" class="wmd-button-row">
+                    <li class="wmd-button" id="wmd-bold-button" title="Strong <strong> Ctrl+B">
+                        <span onmousedown="qwer()" id = "test" onclick = "changeBoldStyle()" style="background-position: 0px 0px;"></span>
+                    </li>
+
+                    <li class="wmd-button" id="wmd-italic-button" title="Emphasis <em> Ctrl+I">
+                        <span style="background-position: -20px 0px;"></span>
+                    </li>
+
+                    <li class="wmd-spacer wmd-spacer1" id="wmd-spacer1">    
+                    </li>
+
+                    <!-- <li class="wmd-button" id="wmd-link-button" title="Hyperlink <a> Ctrl+L">
+                        <span style="background-position: -40px 0px;"></span>
+                    </li> -->
+
+                    <!-- <li class="wmd-button" id="wmd-quote-button" title="Blockquote <blockquote> Ctrl+Q">
+                        <span style="background-position: -60px 0px;"></span>
+                    </li> -->
+
+                    <li class="wmd-button" id="wmd-code-button" title="Code Sample <pre><code> Ctrl+K">
+                        <span style="background-position: -80px 0px;"></span>
+                    </li>
+
+                    <li class="wmd-button" id="wmd-image-button" title="Image <img> Ctrl+G">
+                        <span style="background-position: -100px 0px;"></span>
+                    </li>
+
+                    <!-- <li class="wmd-button wmd-snippet-button" id="wmd-snippet-button" title="JavaScript/HTML/CSS snippet Ctrl-M">
+                        <span></span>
+                    </li> -->
+                    
+                    <li class="wmd-spacer wmd-spacer2" id="wmd-spacer2">
+                    </li>
+
+                    <li class="wmd-button" id="wmd-olist-button" title="Numbered List <ol> Ctrl+O">
+                        <span style="background-position: -120px 0px;"></span>
+                    </li>
+                    
+                    <li class="wmd-button" id="wmd-ulist-button" title="Bulleted List <ul> Ctrl+U">
+                        <span style="background-position: -140px 0px;"></span>
+                    </li>
+                    
+                    <li class="wmd-button" id="wmd-heading-button" title="Heading <h1>/<h2> Ctrl+H">
+                        <span style="background-position: -160px 0px;"></span>
+                    </li>
+                    
+                    <li class="wmd-button" id="wmd-hr-button" title="Horizontal Rule <hr> Ctrl+R">
+                        <span style="background-position: -180px 0px;"></span>
+                    </li>
+                    
+                    <li class="wmd-spacer wmd-spacer3" id="wmd-spacer3"></li>
+                    <!-- <li class="wmd-button" id="wmd-undo-button" title="Undo - Ctrl+Z">
+                        <span style="background-position: -200px 0px;"></span>
+                    </li>
+
+                    <li class="wmd-button" id="wmd-redo-button" title="Redo - Ctrl+Y">
+                        <span style="background-position: -220px -20px;"></span>
+                    </li> -->
+                    
+                    <li class="wmd-spacer wmd-spacer-max"></li>
+                    <li class="s-btn s-btn__muted s-btn__sm as-center" id="wmd-help-button" title="Markdown Editing Help" style="right: 0px;"></li>
+                
+                    </ul>
+
+                    <!-- <div style="border-bottom: 1px solid gray ;height:fit-content ;">
+                        <input src="bold.png" type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="insertAtCursor(document.getElementById('editing-code'), '\n‛코드를 입력해 주세요!‛'); update_mycode()">
+                        <input id = ".click-me" type="button" onclick = "changeBoldStyle()" style="height: 30px; margin-top: 5px; margin-left: 5px;">
+                        <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="opaCiTyNone()">
+                        <input type="button" style="height: 30px; margin-top: 5px; margin-left: 5px;" onclick="changeItalicStyle()">
+                
+                </div> -->
+
         
         </div>
+
         <textarea contenteditable="true"
         id="editing-code"
         placeholder="소스코드 입력"
@@ -362,18 +456,10 @@
         style=" border: none; min-height:400px; max-height: 400px; width:400px; top: 10px; resize: none; overflow: scroll; margin : 0 "
         onclick="update_code2(); resize();  "
         oninput="update_mycode(); resize();">
-dksdugktpdy
-whtnalsdlqsek
+안녕하세요 저는 조수민입니다
 
     </textarea>
     </div>
-
-    <!-- <pre
-        style="height:300px;width:600px;top: 10px; background-color: white; color: black;"
-        id="highlighting-code"
-        class="hljs">
-            <code></code>
-    </pre> -->
 
     <pre class = "hljs" style="position: absolute; display: none; top: 0; margin: 0; word-break: break-all; white-space: pre-wrap; height:400px; width:600px; background-color: white; color: black" id = "count1">
     </pre>
