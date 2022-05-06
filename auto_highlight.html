@@ -13,23 +13,64 @@
     <style>
         pre{
             font-family: 'Source Code Pro';
+            font-size: 12px;
             line-height: 1.2;
         }
         code{
-            font-family: 'Source Code Pro';
             line-height: 1.5;
             height: 40px;
+        }
+        textarea:focus {
+            outline: none;
+        }
+
+        .mdhelp {
+            background-color: hsl(210,8%,95%);
+            border: 1px solid gray;
+            height: fit-content;
+            color: var(--fc-dark);
+            border-right: 1px solid var(--bc-darker);
+            border-left: 1px solid var(--bc-darker);
+        }
+
+        .mdhelp-tabs li {
+            display: inline-block;
+            height: fit-content;
+            font-weight: bold;
+            padding: 6px 0px 6px;
+            margin: 0 2px;
+            font-size: 8px;
+            cursor: pointer;
+        }
+
+        .mdhelp-tabs {
+            background-color: var(--black-050);
+            list-style-type: none;
+            margin: 0;
+            padding: 0 0 0 3px;
+            overflow: hidden;
+        }
+
+
+        .chatbox {animation: motion 1.3s linear 0s 1; }
+        .nochatbox {animation: motion 1.3s linear 0s 1; margin-top: 0;}
+                
+        @keyframes motion {
+            0% {margin-top: 0px;}
+            20% {margin-top: 0px;}
+            40% {margin-top: 10px;}
+            60% {margin-top: 0px;}
+            80% {margin-top: 10px;}
+            100% {margin-top: 0px;}
         }
 
 
         .wmd-button-bar {
             clear: both;
             background-color: transparent;
-            margin: 0 0 0 0;
+            margin: -1 0 0 0;
             padding: 0;
-            width: 100%;
-            border: 1px solid var(--bc-darker);
-            border-bottom: 0;
+            width: 400;
             min-height: 44px;
             overflow: hidden;
             z-index: 2;
@@ -70,12 +111,28 @@
             height: 44px;
             flex: 1 0 4px;
             max-width: 27px;
+            width: 2px;
             display: flex;
             flex-wrap: wrap;
             overflow: hidden;
             position: relative;
+            list-style: none;
+            border: 0;
+            font: inherit;
+            font-size: 100%;
+            vertical-align: baseline;
+            box-sizing: inherit;
             left: 4px;
         }
+        .wmd-spacer:after {
+            background: var(--black-200);
+            width: 1px;
+            height: 43px;
+            margin-top: 1px;
+        }
+
+        
+
     </style>
 
 </head>
@@ -83,15 +140,29 @@
     <script>
 
         var count = 0;
-        var my = 0;
-        var codearray = [[]];
-    
-        function update_code() {
-            const result_elem = document.querySelector("#highlighting-code code");
-            const text = document.querySelector("#editing-code").value;
-            let html = hljs.highlightAuto(text).value;
-            result_elem.innerHTML =  html.replace(new RegExp("  ", "g"), "&nbsp; ");
+        var opacity = 0;
+        var animation = 0;
+
+        function setAnimation_Bold_Italic(){
+            var setbold = document.getElementById("setbold");
+            var setitalic = document.getElementById("setitalic");
+
+            setbold.classList.remove('chatbox'); 
+            void setbold.offsetWidth; 
+            setbold.classList.add('chatbox');
+
+            setitalic.classList.remove('chatbox'); 
+            void setitalic.offsetWidth; 
+            setitalic.classList.add('chatbox');
         }
+
+        function setAnimation_Other(element){
+            element.classList.remove('chatbox'); 
+            void element.offsetWidth; 
+            element.classList.add('chatbox');
+        }
+
+
 
         function update_mycode(){
             var asdf = 0;
@@ -243,6 +314,7 @@
             const editor = document.querySelector('#editing-code');
             editor.style.height = "20px";
             editor.style.height = (editor.scrollHeight + 5)+"px";
+            document.getElementById("undobutton").style.backgroundPosition = "-200px 0px"
         }
 
 
@@ -289,6 +361,20 @@
             }
         }
 
+        function setOpacity(){
+            update_mycode()
+            if (opacity == 0){
+                document.getElementById("preView").style.backgroundPosition = "-260px 0px";
+                opaCiTyNone();
+                opacity = 1;
+            }
+            else if (opacity == 1){
+                document.getElementById("preView").style.backgroundPosition = "-260px center";
+                opaCiTyOn();
+                opacity = 0;
+            }
+        }
+
         function opaCiTyNone(){
             var result_elem = document.getElementById("count1");
             result_elem.style.display = "block";
@@ -298,9 +384,9 @@
             result_elem.style.display = "none";
         }
 
-        function qwer(){
-            var test = document.getElementById("test")
-            test.onmousedown = function(e){
+        function preventEvent(el){
+            
+            el.onmousedown = function(e){
             e = e || window.event;
             e.preventDefault();
         }
@@ -329,7 +415,28 @@
 
             update_mycode()
             }
-        
+
+        function doUndo(){
+            if(document.queryCommandEnabled("undo")){
+                document.execCommand('undo', false, null);
+                document.getElementById("redobutton").style.backgroundPosition = "-220px 0px"
+            }
+            else{
+                document.getElementById("undobutton").style.backgroundPosition = "-200px center"
+            }
+        }
+
+        function doRedo(){
+
+            if(document.queryCommandEnabled("redo")){
+                document.execCommand('redo', false, null);
+            }
+            else{
+                document.getElementById("redobutton").style.backgroundPosition = "-220px center"
+            }
+
+            }
+                    
         function changeItalicStyle() {
             var count = 0;
             var sel = window.getSelection(); 
@@ -370,35 +477,29 @@
     </script>
 
 <body style="margin: 0;">
-    <div style=" border-radius: 3dp; height: fit-content; width: fit-content;" >
+    <div style="border: 1px solid gray; border-radius: 3px; width: fit-content; height: fit-content;" >
 
             <div id="wmd-button-bar" class="wmd-button-bar btr-sm mt0">
                 <ul id="wmd-button-row" class="wmd-button-row">
                     <li class="wmd-button" id="wmd-bold-button" title="Strong <strong> Ctrl+B">
-                        <span onmousedown="qwer()" id = "test" onclick = "changeBoldStyle()" style="background-position: 0px 0px;"></span>
+                        <span id = "setbold" onmouseenter="preventEvent(this)" onclick = "changeBoldStyle()" style="background-position: 0px 0px;"></span>
                     </li>
 
                     <li class="wmd-button" id="wmd-italic-button" title="Emphasis <em> Ctrl+I">
-                        <span style="background-position: -20px 0px;"></span>
+                        <span id = "setitalic" onmouseenter="preventEvent(this)" onclick = "changeItalicStyle()" style="background-position: -20px 0px;"></span>
                     </li>
 
-                    <li class="wmd-spacer wmd-spacer1" id="wmd-spacer1">    
+                    <li class="wmd-spacer">    
                     </li>
 
-                    <!-- <li class="wmd-button" id="wmd-link-button" title="Hyperlink <a> Ctrl+L">
-                        <span style="background-position: -40px 0px;"></span>
-                    </li> -->
 
-                    <!-- <li class="wmd-button" id="wmd-quote-button" title="Blockquote <blockquote> Ctrl+Q">
-                        <span style="background-position: -60px 0px;"></span>
-                    </li> -->
 
                     <li class="wmd-button" id="wmd-code-button" title="Code Sample <pre><code> Ctrl+K">
-                        <span style="background-position: -80px 0px;"></span>
+                        <span id = "code" onclick="insertAtCursor(document.getElementById('editing-code'), '\n‛코드를 입력해 주세요!‛')" style="background-position: -80px 0px;"></span>
                     </li>
 
                     <li class="wmd-button" id="wmd-image-button" title="Image <img> Ctrl+G">
-                        <span style="background-position: -100px 0px;"></span>
+                        <span id = "image" style="background-position: -100px 0px;"></span>
                     </li>
 
                     <!-- <li class="wmd-button wmd-snippet-button" id="wmd-snippet-button" title="JavaScript/HTML/CSS snippet Ctrl-M">
@@ -408,7 +509,11 @@
                     <li class="wmd-spacer wmd-spacer2" id="wmd-spacer2">
                     </li>
 
-                    <li class="wmd-button" id="wmd-olist-button" title="Numbered List <ol> Ctrl+O">
+                    <li class="wmd-button" id="wmd-quote-button" title="Blockquote <blockquote> Ctrl+Q">
+                        <span id = "preView" onclick="setOpacity()" style="background-position: -260px center;"></span>
+                    </li>
+
+                    <!-- <li class="wmd-button" id="wmd-olist-button" title="Numbered List <ol> Ctrl+O">
                         <span style="background-position: -120px 0px;"></span>
                     </li>
                     
@@ -422,16 +527,16 @@
                     
                     <li class="wmd-button" id="wmd-hr-button" title="Horizontal Rule <hr> Ctrl+R">
                         <span style="background-position: -180px 0px;"></span>
-                    </li>
+                    </li> -->
                     
                     <li class="wmd-spacer wmd-spacer3" id="wmd-spacer3"></li>
-                    <!-- <li class="wmd-button" id="wmd-undo-button" title="Undo - Ctrl+Z">
-                        <span style="background-position: -200px 0px;"></span>
+                    <li class="wmd-button" id="wmd-undo-button" >
+                        <span id = "undobutton" onclick="doUndo()" style="background-position: -200px 0px;"></span>
                     </li>
 
-                    <li class="wmd-button" id="wmd-redo-button" title="Redo - Ctrl+Y">
-                        <span style="background-position: -220px -20px;"></span>
-                    </li> -->
+                    <li class="wmd-button" id="wmd-redo-button" >
+                        <span id = "redobutton" onclick = "doRedo()" style="background-position: -220px -20px;"></span>
+                    </li>
                     
                     <li class="wmd-spacer wmd-spacer-max"></li>
                     <li class="s-btn s-btn__muted s-btn__sm as-center" id="wmd-help-button" title="Markdown Editing Help" style="right: 0px;"></li>
@@ -448,12 +553,23 @@
 
         
         </div>
+        <div id="mdhelp" class="mdhelp bg-black-025  bl br bc-black-200" style="">
+            <ul id="mdhelp-tabs" class="mdhelp-tabs bg-black-025 d-flex overflow-x-auto overflow-y-hidden">
+                <li onclick="setAnimation_Bold_Italic()">글시체</li>
+                <li onclick="setAnimation_Other(document.getElementById('code'))" >코드</li>
+                <li onclick="setAnimation_Other(document.getElementById('image'))" >이미지</li>
+                <li onclick="setAnimation_Other(document.getElementById('preView'))" >미리보기</li>
+                <li onclick="setAnimation_Other(document.getElementById('undobutton'))" >전 작업</li>
+                <li onclick="setAnimation_Other(document.getElementById('redobutton'))" >앞 작업</li>
+            </ul>
 
-        <textarea contenteditable="true"
+        </div>
+
+        <textarea 
         id="editing-code"
         placeholder="소스코드 입력"
         spellcheck="false"
-        style=" border: none; min-height:400px; max-height: 400px; width:400px; top: 10px; resize: none; overflow: scroll; margin : 0 "
+        style="border: none; margin-top: -3px; min-height:400px; max-height: 400px; width:400px; top: 10px; resize: none; margin : 0; outline: none; "
         onclick="update_code2(); resize();  "
         oninput="update_mycode(); resize();">
 안녕하세요 저는 조수민입니다
@@ -461,8 +577,9 @@
     </textarea>
     </div>
 
-    <pre class = "hljs" style="position: absolute; display: none; top: 0; margin: 0; word-break: break-all; white-space: pre-wrap; height:400px; width:600px; background-color: white; color: black" id = "count1">
+    <pre class = "hljs" style="vertical-align: middle; position: absolute; display: none; left: 1px; top: 74.5px; margin: 0; word-break: break-all; white-space: pre-wrap; height:390px; width:388px; background-color: white; color: black" id = "count1">
     </pre>
+
 
 
 
