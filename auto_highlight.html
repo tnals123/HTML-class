@@ -5,7 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/styles/vs2015.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.6.0/styles/solarized-light.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.1.0/highlight.min.js" integrity="sha512-z+/WWfyD5tccCukM4VvONpEtLmbAm5LDu7eKiyMQJ9m7OfPEDL7gENyDRL3Yfe8XAuGsS2fS4xSMnl6d30kqGQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script>hljs.highlightAll();</script>
     <script src="http://code.jquery.com/jquery-latest.js"></script>
@@ -14,10 +14,12 @@
         pre{
             font-family: 'Source Code Pro';
             font-size: 12px;
+            font-weight: 500;
             line-height: 1.2;
         }
         code{
             line-height: 1.5;
+            font-weight:800;
             height: 40px;
         }
         textarea:focus {
@@ -142,6 +144,7 @@
         var count = 0;
         var opacity = 0;
         var animation = 0;
+        var my = 0;
 
         function setAnimation_Bold_Italic(){
             var setbold = document.getElementById("setbold");
@@ -178,6 +181,14 @@
             var italicfirst = 0 ;
             var italicfinal = 0;
             var italiccount = 0;
+
+            var imagefirst = 0;
+            var imagefinal = 0;
+            var imagecount = 0;
+
+            var headingfirst = 0;
+            var headingfinal = 0;
+            var headingcount = 0;
             
             var result_elem = document.getElementById("count1");
             var text = document.getElementById("editing-code");
@@ -232,6 +243,48 @@
                     italiccount = 0;
                 }
 
+                else if (resultString[i] == "【"){
+                    if (imagecount == 0){
+                        imagefirst = i;
+                        imagecount += 1;
+                    }
+                }
+                else if (resultString[i] == "】"){
+                    if (imagecount == 1){
+                        imagefinal = i;
+                        imagecount += 1;
+                    }
+                }
+
+                if (imagecount == 2){
+                    var imagetext = resultString.slice(imagefirst,imagefinal + 1);
+                    var imageinnertext = resultString.slice(imagefirst+1,imagefinal);
+                    console.log(imagetext)
+                    console.log(imageinnertext)
+                    resultString = resultString.replace(new RegExp(imagetext, "g"),"<img src="+'"'+imageinnertext+'"'+" style = " + "width:100%;"+">")
+                    imagecount = 0;
+                }
+
+                else if (resultString[i]=="◇"){
+                    if (headingcount == 0){
+                        headingfirst = i;
+                        headingcount += 1;
+                    }
+                    else if (headingcount == 1){
+                        headingfinal = i;
+                        headingcount += 1;
+                    }
+                }
+
+                if (headingcount == 2){
+                    var headingtext = resultString.slice(headingfirst,headingfinal + 1);
+                    var headinginnertext = resultString.slice(headingfirst+1,headingfinal);
+                    console.log(headingtext)
+                    console.log(headinginnertext)
+                    resultString = resultString.replace(new RegExp(headingtext, "g"),"<h3>"+headinginnertext+"</h3>")
+                    headingcount = 0;
+                }
+
                 else if (resultString[i] == "‛"){
                     if (textcound == 0){
                             first = i;
@@ -276,7 +329,7 @@
                     var html4 = html3.replace(new RegExp('<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>', "g"),'<br>')
 
 
-                    resultString = resultString.replace(resultString.slice(first,final+1),"<pre id = 'asdf' " + " onchange = " + '"'+ auto_grow2(document.getElementById("asdf")) + '"' + "style = width:fit-content;" +"white-space:pre-line;" +"background-color:#D3D3D3;"+ "><code style = border-radius:3px;"+"word-break:break-all;"+">"  + html4 + "</code></pre>")
+                    resultString = resultString.replace(resultString.slice(first,final+1),"<pre id = 'asdf' " + " onchange = " + '"'+ auto_grow2(document.getElementById("asdf")) + '"' + "style = width:fit-content;" +"white-space:pre-line;" +"background-color:#E3E6E8;"+ "><code style = border-radius:3px;"+"word-break:break-all;"+"font-weight:800;"+">"  + html4 + "</code></pre>")
                     textcound = 0;
                 }
 
@@ -391,6 +444,20 @@
             e.preventDefault();
         }
         }
+        function updateImage(){
+            var str=document.getElementById("editing-code");
+            var imagePath = "zzzzzzz"
+            var resultStr = str.innerHTML;
+            resultStr += "【" + imagePath + "】\n"
+            str.innerHTML = resultStr
+        }
+
+        function Header(){
+            var str=document.getElementById("editing-code"); 
+            var resultStr = str.innerHTML;
+            resultStr += "◇ Heading ◇\n"
+            str.innerHTML = resultStr
+        }
 
         function changeBoldStyle() {
             var count = 0;
@@ -436,6 +503,9 @@
             }
 
             }
+
+
+
                     
         function changeItalicStyle() {
             var count = 0;
@@ -499,7 +569,7 @@
                     </li>
 
                     <li class="wmd-button" id="wmd-image-button" title="Image <img> Ctrl+G">
-                        <span id = "image" style="background-position: -100px 0px;"></span>
+                        <span id = "image" onclick="updateImage()" style="background-position: -100px 0px;"></span>
                     </li>
 
                     <!-- <li class="wmd-button wmd-snippet-button" id="wmd-snippet-button" title="JavaScript/HTML/CSS snippet Ctrl-M">
@@ -513,7 +583,7 @@
                         <span id = "preView" onclick="setOpacity()" style="background-position: -260px center;"></span>
                     </li>
 
-                    <!-- <li class="wmd-button" id="wmd-olist-button" title="Numbered List <ol> Ctrl+O">
+                    <li class="wmd-button" id="wmd-olist-button" title="Numbered List <ol> Ctrl+O">
                         <span style="background-position: -120px 0px;"></span>
                     </li>
                     
@@ -522,12 +592,12 @@
                     </li>
                     
                     <li class="wmd-button" id="wmd-heading-button" title="Heading <h1>/<h2> Ctrl+H">
-                        <span style="background-position: -160px 0px;"></span>
+                        <span onclick="insertAtCursor(document.getElementById('editing-code'), '◇ Heading ◇')" style="background-position: -160px 0px;"></span>
                     </li>
                     
                     <li class="wmd-button" id="wmd-hr-button" title="Horizontal Rule <hr> Ctrl+R">
                         <span style="background-position: -180px 0px;"></span>
-                    </li> -->
+                    </li>
                     
                     <li class="wmd-spacer wmd-spacer3" id="wmd-spacer3"></li>
                     <li class="wmd-button" id="wmd-undo-button" >

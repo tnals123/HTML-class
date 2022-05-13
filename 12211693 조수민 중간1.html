@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        function calculate(){
+            var capitals = document.getElementById("cap");
+            var interest = document.getElementById("inter");
+            var year = document.getElementById("year");
+            if (capitals.value <0 || capitals.value>1000000){
+                alert("조건에 부합되지 않는 수입니다");
+                capitals.value = "";
+            }
+            else if (interest.value <0 || interest.value>8){
+                alert("조건에 부합되지 않는 수입니다");
+                interest.value = "";
+            }
+            else if (year.value <1 || year.value>20){
+                alert("조건에 부합되지 않는 수입니다");
+                year.value = "";
+            }
+
+            else{
+                var money = parseInt(capitals.value)*((1+(parseFloat(interest.value)*0.01))**year.value)
+                var final = document.getElementById("final");
+                final.innerHTML = money;
+                
+            }
+        }
+    </script>
+</head>
+
+
+<body>
+   <table border="1">
+       <tr>
+           <td>Initial Capitals</td>
+           <td><input id = "cap" type="text">$</td>
+       </tr>
+       <tr>
+            <td>Annual Interest Rate</td>
+            <td><input id = "inter" type="text">%</td>
+        </tr>
+        <tr>
+            <td>Initial Capitals</td>
+            <td><input id = "year" type="text">Year</td>
+        </tr>
+        <tr>
+            <td colspan="2"><input style="margin-left: 80px; width: 190px;" type="button" value="Calculate now!" onclick="calculate()"></td>
+
+        </tr>
+        <tr>
+            <td>Principal and Interest</td>
+            <td><span id = "final"></span>$</td>
+        </tr>
+   </table>
+</body>
+</html>

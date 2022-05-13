@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script>
+        var row = 1;
+        var cell = 1;
+        var cell = 2;
+        function add(){
+            var asdf = document.getElementById("table");
+            var tr = document.createElement("tr");
+            var td = document.createElement("td");
+            var td2 = document.createElement("td");
+            td.innerHTML = "row " + row +",cell1";
+            td2.innerHTML = "row " + row +",cell2";
+            tr.appendChild(td);
+            tr.appendChild(td2);
+            asdf.appendChild(tr);
+            row += 1;
+        }
+        function deletea(){
+            var asdf = document.getElementById("table");
+            if (row >1){
+                asdf.removeChild(asdf.children[asdf.children.length-1]);
+                row -= 1;
+            }
+        }
+    </script>
+</head>
+<body>
+    <input type="button" value="add_new_row" id = "button1" onclick="add()">
+    <input type="button" value="dekete_last_row" id = "button2" onclick="deletea()">
+    <table id = "table" border="1">
+        <tr>
+            <td style="background-color: green;">Header1</td>
+            <td style="background-color: green;">Header2</td>
+        </tr>
+    </table>
+</body>
+</html>
