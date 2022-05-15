@@ -26,6 +26,31 @@
             outline: none;
         }
 
+        .s-btn__primary {
+            color: var(--theme-button-primary-color);
+            background-color: var(--theme-button-primary-background-color);
+            box-shadow: inset 0 1px 0 0 hsl(0deg 0% 100% / 40%);
+        }
+
+        .s-btn {
+            position: relative;
+            display: inline-block;
+            padding: 0.8em;
+            color: var(--theme-button-color);
+            border: 1px solid transparent;
+            border-radius: var(--br-sm);
+            background-color: transparent;
+            outline: none;
+            font-family: inherit;
+            font-size: var(--fs-body1);
+            font-weight: normal;
+            line-height: var(--lh-sm);
+            text-align: center;
+            text-decoration: none;
+            cursor: pointer;
+            user-select: none;
+}
+
         .mdhelp {
             background-color: hsl(210,8%,95%);
             border: 1px solid gray;
@@ -133,6 +158,18 @@
             margin-top: 1px;
         }
 
+        blockquote::before {
+            content: "";
+            display: block;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: var(--su4);
+            border-radius: var(--su-static8);
+            background: var(--black-150);
+        }
+
         
 
     </style>
@@ -145,6 +182,7 @@
         var opacity = 0;
         var animation = 0;
         var my = 0;
+        var number = 1;
 
         function setAnimation_Bold_Italic(){
             var setbold = document.getElementById("setbold");
@@ -218,7 +256,6 @@
                 if (boldcount == 2){
                     var boldtext = resultString.slice(boldfirst,boldfinal + 1);
                     var boldinnertext = resultString.slice(boldfirst+1,boldfinal);
-                    console.log(boldtext)
                     resultString = resultString.replace(new RegExp(boldtext, "g"),"<span style=" + "font-weight:bold;"+">"+boldinnertext+"</span>");
                     boldcount = 0;
                 }
@@ -238,7 +275,6 @@
                 if (italiccount == 2){
                     var italictext = resultString.slice(italicfirst,italicfinal + 1);
                     var italicinnertext = resultString.slice(italicfirst+1,italicfinal);
-                    console.log(italicfirst,italicfinal)
                     resultString = resultString.replace(new RegExp(italictext, "g"),"<span style=" + "font-style:italic;"+">"+italicinnertext+"</span>");
                     italiccount = 0;
                 }
@@ -259,8 +295,6 @@
                 if (imagecount == 2){
                     var imagetext = resultString.slice(imagefirst,imagefinal + 1);
                     var imageinnertext = resultString.slice(imagefirst+1,imagefinal);
-                    console.log(imagetext)
-                    console.log(imageinnertext)
                     resultString = resultString.replace(new RegExp(imagetext, "g"),"<img src="+'"'+imageinnertext+'"'+" style = " + "width:100%;"+">")
                     imagecount = 0;
                 }
@@ -279,9 +313,7 @@
                 if (headingcount == 2){
                     var headingtext = resultString.slice(headingfirst,headingfinal + 1);
                     var headinginnertext = resultString.slice(headingfirst+1,headingfinal);
-                    console.log(headingtext)
-                    console.log(headinginnertext)
-                    resultString = resultString.replace(new RegExp(headingtext, "g"),"<h3>"+headinginnertext+"</h3>")
+                    resultString = resultString.replace(new RegExp(headingtext, "g"),"<h2 style = display:inline>"+headinginnertext+"</h2>")
                     headingcount = 0;
                 }
 
@@ -303,9 +335,7 @@
 
                     var mytext = resultString.slice(first+1,final);
                     var mytext2 = mytext
-                    console.log(mytext)
                     var mytext3 = mytext.replace(new RegExp("</p><p>", "g"), "<br>");
-                    console.log(mytext3)
                     let html = hljs.highlightAuto(mytext3).value;
 
 
@@ -313,9 +343,7 @@
                         try{
                             if (html[i] == " "){
                                 if (html[i-1] && html[i+1] == " "){
-                                    console.log(i)
                                     html = html.slice(0,i) + "&nbsp;" + html.slice(i+1)
-                                    console.log(html)
                                 }
                             }
                         }
@@ -324,12 +352,11 @@
                         }
                     }
 
-                    console.log(html)
                     var html3 = html.replace(new RegExp('&lt;br&gt;', "g"),'<br>')
                     var html4 = html3.replace(new RegExp('<span class="hljs-tag">&lt;<span class="hljs-name">br</span>&gt;</span>', "g"),'<br>')
 
 
-                    resultString = resultString.replace(resultString.slice(first,final+1),"<pre id = 'asdf' " + " onchange = " + '"'+ auto_grow2(document.getElementById("asdf")) + '"' + "style = width:fit-content;" +"white-space:pre-line;" +"background-color:#E3E6E8;"+ "><code style = border-radius:3px;"+"word-break:break-all;"+"font-weight:800;"+">"  + html4 + "</code></pre>")
+                    resultString = resultString.replace(resultString.slice(first,final+1),"<pre id = 'asdf' " + "style = width:fit-content;" +"white-space:pre-line;" +"background-color:#E3E6E8;"+ "><code style = border-radius:3px;"+"word-break:break-all;"+"font-weight:800;"+">"  + html4 + "</code></pre>")
                     textcound = 0;
                 }
 
@@ -350,18 +377,10 @@
         }
 
         function auto_grow(element) {
-            console.log(element);
             element.style.height = "5px";
             element.style.height = (element.scrollHeight)+"px";
         }
-        function auto_grow2(element) {
-            if (my > 0){
-                console.log(element);
-                element.style.height = "5px";
-                element.style.height = (element.scrollHeight)+"px";
-            }
-            my += 1;
-        }
+
 
         function resize() {
             const editor = document.querySelector('#editing-code');
@@ -374,7 +393,6 @@
         function insertCodeBlock(position){
             var paper = document.getElementById("editing-code");
             var result_elem = document.querySelector("#count1");
-            console.log(position);
  
             var paper_childtext = paper.childNodes[0];
 
@@ -391,8 +409,6 @@
             codeblock.oninput = function(){
                 auto_grow(this);
             }
-            console.log(paper_childtext.length)
-            console.log(paper_childtext.splitText(position));
             paper.insertBefore(codeblock, paper_childtext.splitText(position));
                     
         }
@@ -465,7 +481,6 @@
             var str=document.getElementById("editing-code"); 
             var e = document.createElement('span');
             e.innerHTML = sel.toString(); 
-            console.log(e.innerHTML)
             for (i = 0 ; i <e.innerHTML.length; i++){
                 if (e.innerHTML[i] == "『" || e.innerHTML[i] =="』" ){
                     count += 1
@@ -506,6 +521,70 @@
 
 
 
+        function mynumberList() {
+            var text = document.getElementById('editing-code').value;
+            var exp = '\n' + (getLastNumber(text) + 1) + '.\xa0';
+            text = text.concat(exp);
+            insertAtCursor(document.getElementById('editing-code'), exp)
+            // document.getElementById('editing-code').value = text;
+            }
+
+            function getLastNumber(str){
+            var list = str.split(/[\r\n]/g);
+            var n = 0;
+            list.forEach(function(s){
+                if(/^\d+\./.test(s)){
+                n = parseInt(s.substring(0, s.indexOf(".")));
+                }
+            });
+            return n;
+            }
+            
+
+        //     insertAtCursor(document.getElementById('editing-code'), "\n"+mynumber+"。");
+
+        //     var str2=document.getElementById("editing-code"); 
+        //     var resultstr2 = str.value;
+        //     console.log(resultstr2)
+        //     var resultarr2 = [];
+        //     var realarr = []
+        //     var splitstr2 = resultstr2.split("\n")
+        //     console.log(splitstr2)
+
+        //     for (i = 0 ; i <splitstr2.length; i++){
+        //         if (splitstr2[i] == "1。"){
+        //             innerHTMLfirst = i-1;
+        //         }
+        //         if (splitstr2[i][1] != "。"){
+        //             innerHTMLfinal = i;
+        //             console.log(innerHTMLfinal)
+        //         }
+        //         if (splitstr2[i].indexOf("。") == 1){
+        //             resultarr2.push((splitstr2[i].slice(2)));
+        //             realarr.push(parseInt(splitstr2[i][0]));
+        //         }
+        //     }
+
+
+        //     realarr.sort()
+        //     var realrealarr = [];
+
+        //     for (i = 0 ; i<resultarr2.length;i++){
+        //         realrealarr.push(realarr[i]+"。"+resultarr2[i])
+        //     }
+        //     for (i = 0 ; i <=innerHTMLfirst;i++){
+        //         realrealarr.splice(i, 0,splitstr2[i]);
+        //     }
+        //     for (i = innerHTMLfinal ; i <splitstr2.length;i++){
+        //         realrealarr.push(splitstr2[i])
+        //     }
+
+        //     console.log(realrealarr)
+
+        // }
+
+
+
                     
         function changeItalicStyle() {
             var count = 0;
@@ -535,12 +614,20 @@
             var px = Android.getwidth(mywidth);
             var mypx = px - 29;
             var mypx_codeblcok = px - 32;
-            Android.showToast(String(mypx));
             var transe = document.getElementById("editing-code");
             var code_block = document.getElementById("highlighting-code")
+            var submitbutton = document.getElementById("submitbutton");
             transe.style.width = mypx+"px";
+            submitbutton.style.left = mypx/2 +"px";
             code_block.style.width = mypx_codeblcok+"px";
             document.getElementById(id).width = newContent;
+        }
+
+        function uploadPost(){
+            var transe = document.getElementById("count1");
+            var str = transe.innerHTML;
+            console.log(str)
+            Android.showToast(str);
         }
 
     
@@ -575,16 +662,18 @@
                     <!-- <li class="wmd-button wmd-snippet-button" id="wmd-snippet-button" title="JavaScript/HTML/CSS snippet Ctrl-M">
                         <span></span>
                     </li> -->
-                    
-                    <li class="wmd-spacer wmd-spacer2" id="wmd-spacer2">
-                    </li>
 
                     <li class="wmd-button" id="wmd-quote-button" title="Blockquote <blockquote> Ctrl+Q">
                         <span id = "preView" onclick="setOpacity()" style="background-position: -260px center;"></span>
                     </li>
+                    
+                    <li class="wmd-spacer wmd-spacer2" id="wmd-spacer2">
+                    </li>
+
+
 
                     <li class="wmd-button" id="wmd-olist-button" title="Numbered List <ol> Ctrl+O">
-                        <span style="background-position: -120px 0px;"></span>
+                        <span onclick="mynumberList()" style="background-position: -120px 0px;"></span>
                     </li>
                     
                     <li class="wmd-button" id="wmd-ulist-button" title="Bulleted List <ul> Ctrl+U">
@@ -637,18 +726,18 @@
 
         <textarea 
         id="editing-code"
-        placeholder="소스코드 입력"
+        placeholder="안녕하세요!"
         spellcheck="false"
         style="border: none; margin-top: -3px; min-height:400px; max-height: 400px; width:400px; top: 10px; resize: none; margin : 0; outline: none; "
         onclick="update_code2(); resize();  "
         oninput="update_mycode(); resize();">
-안녕하세요 저는 조수민입니다
-
-    </textarea>
+</textarea>
     </div>
 
     <pre class = "hljs" style="vertical-align: middle; position: absolute; display: none; left: 1px; top: 74.5px; margin: 0; word-break: break-all; white-space: pre-wrap; height:390px; width:388px; background-color: white; color: black" id = "count1">
-    </pre>
+</pre>
+
+    <button id = "submitbutton" style="font-size: 10px; padding: 5px; box-shadow:inset 0 1px 0 0 hsl(0deg 0% 100% / 40%); border:none; border-radius:3px; background-color: hsl(206,100%,52%); color: white;">질문하기</button>
 
 
 
